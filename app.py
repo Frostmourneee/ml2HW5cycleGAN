@@ -5,16 +5,7 @@ from PIL import Image
 import numpy as np
 from torchvision import transforms as tr
 from generator import ResnetGenerator
-from streamlit_image_gallery_enhanced import streamlit_image_gallery
-import base64
-import io
 
-def get_image_base64(img_path):
-    with Image.open(img_path) as img:
-        img = img.resize((300, 300))
-        buffer = io.BytesIO()
-        img.save(buffer, format="JPEG")
-        return base64.b64encode(buffer.getvalue()).decode()
 
 @st.cache_resource
 def load_generators():
@@ -57,27 +48,27 @@ with col1:
         examples_dir = "galery/Oranges"
 
     example_images = [f for f in os.listdir(examples_dir) if f.endswith(('.jpg', '.png', '.jpeg'))]
-    image_items = []
-    for img_file in example_images:
-        img_path = os.path.join(examples_dir, img_file)
-        image_items.append({
-            "src": f"data:image/jpeg;base64,{get_image_base64(img_path)}",
-            "title": img_file
-        })
+    # image_items = []
+    # for img_file in example_images:
+    #     img_path = os.path.join(examples_dir, img_file)
+    #     image_items.append({
+    #         "src": f"data:image/jpeg;base64,{get_image_base64(img_path)}",
+    #         "title": img_file
+    #     })
+    #
+    # clicked_index = streamlit_image_gallery(
+    #     images=image_items,
+    #     max_cols=3,
+    #     gap=10,
+    #     key="example_gallery"
+    # )
 
-    clicked_index = streamlit_image_gallery(
-        images=image_items,
-        max_cols=3,
-        gap=10,
-        key="example_gallery"
-    )
-
-    if clicked_index is not None:
-        example_path = os.path.join(examples_dir, example_images[clicked_index])
-        example_img = Image.open(example_path)
-        st.image(example_img, caption=example_images[clicked_index], use_container_width=True)
-        st.session_state["selected_image"] = example_img
-        st.session_state["is_example"] = True
+    # if clicked_index is not None:
+    #     example_path = os.path.join(examples_dir, example_images[clicked_index])
+    #     example_img = Image.open(example_path)
+    #     st.image(example_img, caption=example_images[clicked_index], use_container_width=True)
+    #     st.session_state["selected_image"] = example_img
+    #     st.session_state["is_example"] = True
 
 with col2:
     st.subheader("Результат")
